@@ -18,9 +18,7 @@
 
 ### 2.配置华为推送
 
-华为推送的SDK是通过工具生成的，所以需要手动配置生成代码，可以参考官网教程：
-
-[华为推送SDK]: http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_devprepare_agent
+华为推送的SDK是通过工具生成的，所以需要手动配置生成代码，可以参考官网教程：[华为推送官网教程](http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_devprepare_agent)
 
 将生成的代码复制到Push的java目录下面，res资源文件根据需要添加到资源目录下。
 
