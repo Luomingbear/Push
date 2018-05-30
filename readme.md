@@ -10,7 +10,7 @@
 
 ### 1.配置AppKey
 
-![微信截图_20180530150918](E:\AndroidStudioProjects\PushDemo\push\img\微信截图_20180530150918.png)
+![微信截图_20180530150918](img/微信截图_20180530150918.png)
 
 在push模块下面的`buid.gradle`文件里面替换对应的AppKey，**需要注意的地方**：
 
@@ -30,13 +30,13 @@
 
 要处理接收到的信息，只需要实现`HandleReceiverMessage`或者`HandleReceiverNotification`的`handle`方法即可。
 
-![微信截图_20180530153820](E:\AndroidStudioProjects\PushDemo\push\img\微信截图_20180530153820.png)
+![微信截图_20180530153820](img/微信截图_20180530153820.png)
 
 ### 4.处理用户点击通知栏
 
 针对用户点击通知栏的行为，我们可能需要对通知进行处理跳转到指定的页面，在非华为设备上面，只需要实现`HandleReceiverNotificationOpened`的`handle`方法。在华为的设备上面，普通的Notification发送之后不会执行到`HandleReceiverMessage`，也没有点击之后的`HandleReceiverNotificationOpened`,但是，系统默认实现了点击通知打开App的功能，如需要实现点击通知到指定页面，请选择**透传消息**。
 
-![微信截图_20180530160745](E:\AndroidStudioProjects\PushDemo\push\img\微信截图_20180530160745.png)
+![微信截图_20180530160745](img/微信截图_20180530160745.png)
 
 ### 4.上传别名到服务器
 
@@ -44,17 +44,17 @@
 
 用户只需要在`HandleReceiverAlias`类实现`handle`方法就可以了。
 
-![微信截图_20180530152949](E:\AndroidStudioProjects\PushDemo\push\img\微信截图_20180530152949.png)
+![微信截图_20180530152949](img/微信截图_20180530152949.png)
 
 ## 模块设计思路
 
 通过对推送服务的分析，我将推送分为了三个步骤，分别是：初始化、接收和处理，不同的推送平台的接收方式并不一样，但是推送服务只是一个工具，接收推送之后的处理才是关键，而这个是不需要根据不同的平台来变化的，所以我使用了一个统一的处理入口。
 
-![PushMind](E:\AndroidStudioProjects\PushDemo\push\img\PushMind.png)
+![PushMind](img/PushMind.png)
 
 根据这个思路，我设计的代码结构如下：
 
-![folder](E:\AndroidStudioProjects\PushDemo\push\img\folder.png)
+![folder](img/folder.png)
 
 | 目录     | 说明                                 |
 | ------ | ---------------------------------- |
