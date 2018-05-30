@@ -1,0 +1,77 @@
+package com.bearever.push.handle;
+
+/**
+ * 接收到的推送的消息
+ * Created by luoming on 2018/5/28.
+ */
+
+public class ReceiverInfo {
+    private PushTarget pushTarget = PushTarget.JPUSH; //推送平台
+    private String title = ""; //标题
+    private String content = ""; //内容
+    private String extra = ""; //额外数据
+    private Object rawData; //原始数据
+
+    /**
+     * 推送平台
+     */
+    public enum PushTarget {
+        JPUSH, //极光
+
+        XIAOMI, //小米
+
+        HUAWEI; //华为
+    }
+
+    public ReceiverInfo() {
+    }
+
+    public ReceiverInfo(PushTarget pushTarget, String title, String content, String extra,
+                        Object rawData) {
+        this.pushTarget = pushTarget;
+        this.title = title;
+        this.content = content;
+        this.extra = extra;
+        this.rawData = rawData;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public PushTarget getPushTarget() {
+        return pushTarget;
+    }
+
+    public void setPushTarget(PushTarget pushTarget) {
+        this.pushTarget = pushTarget;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+    }
+
+    public Object getRawData() {
+        return rawData;
+    }
+
+    public void setRawData(Object rawData) {
+        this.rawData = rawData;
+    }
+}
