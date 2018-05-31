@@ -4,7 +4,7 @@
 
 ## 更新时间
 
-2018/05/30
+2018/05/31
 
 ## 使用
 
@@ -24,7 +24,7 @@
 
 ### 3.初始化
 
-在Application的onCreate里面调用`InitPushTargetManager`的`init`方法。同时在第一个activity里面调用`initHuaweiPush`方法。
+在Application的onCreate里面调用`PushTargetManager`的`init`方法。同时在第一个activity里面调用`initHuaweiPush`方法。
 
 ### 4.处理推送消息
 
@@ -32,21 +32,19 @@
 
 要处理接收到的信息，只需要实现`HandleReceiverMessage`或者`HandleReceiverNotification`的`handle`方法即可。
 
-![微信截图_20180530153820](img/微信截图_20180530153820.png)
+![微信截图_20180530153820](img/微信截图_20180531110846.png)
 
 ### 5.处理用户点击通知栏
 
 针对用户点击通知栏的行为，我们可能需要对通知进行处理跳转到指定的页面，在非华为设备上面，只需要实现`HandleReceiverNotificationOpened`的`handle`方法。在华为的设备上面，普通的Notification发送之后不会执行到`HandleReceiverMessage`，也没有点击之后的`HandleReceiverNotificationOpened`,但是，系统默认实现了点击通知打开App的功能，如需要实现点击通知到指定页面，请选择**透传消息**。
 
-![微信截图_20180530160745](img/微信截图_20180530160745.png)
+![微信截图_20180530160745](img/微信截图_20180531111009.png)
 
-### 6.上传别名到服务器
+### 6.设置别名
 
-为了区别不同的设备与账号的对应关系，需要将设备别名设置到推送服务器和自己应用的服务器。模块自行维护了设置别名到推送服务器，用户只需要实现将别名上传到自己应用的服务器。**当然，如果你不需要知道具体用户对于的设备，也可以不处理。**
+为了区别不同的设备与账号的对应关系，需要将设备别名设置到推送服务器和自己应用的服务器。**当然，如果你不需要知道具体用户对于的设备，也可以不处理。**别名的设置需要执行`PushTargetManager`的`setAliasNotWithHuawei`,从方法名可以看到，华为推送不支持设置别名，只能获取华为服务器返回的`token`。对于将别名上传到服务器的操作，用户只需要在`HandleReceiverAlias`类实现`handle`方法就可以了。
 
-用户只需要在`HandleReceiverAlias`类实现`handle`方法就可以了。
-
-![微信截图_20180530152949](img/微信截图_20180530152949.png)
+![微信截图_20180530152949](img/微信截图_20180531111115.png)
 
 ## 模块设计思路
 
