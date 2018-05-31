@@ -1,4 +1,4 @@
-package com.bearever.push.init;
+package com.bearever.push.target;
 
 import android.app.Application;
 

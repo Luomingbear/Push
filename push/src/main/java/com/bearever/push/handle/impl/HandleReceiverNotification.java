@@ -3,7 +3,7 @@ package com.bearever.push.handle.impl;
 import android.content.Context;
 import android.util.Log;
 
-import com.bearever.push.handle.ReceiverInfo;
+import com.bearever.push.model.ReceiverInfo;
 
 /**
  * 处理推送的通知，会主动显示通知栏

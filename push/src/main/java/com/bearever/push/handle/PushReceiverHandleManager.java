@@ -1,7 +1,6 @@
 package com.bearever.push.handle;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.bearever.push.handle.impl.BaseHandleListener;
 import com.bearever.push.handle.impl.HandleReceiverAlias;
@@ -9,6 +8,7 @@ import com.bearever.push.handle.impl.HandleReceiverMessage;
 import com.bearever.push.handle.impl.HandleReceiverNotification;
 import com.bearever.push.handle.impl.HandleReceiverNotificationOpened;
 import com.bearever.push.handle.impl.HandleReceiverRegistration;
+import com.bearever.push.model.ReceiverInfo;
 
 /**
  * 统一处理收到的推送

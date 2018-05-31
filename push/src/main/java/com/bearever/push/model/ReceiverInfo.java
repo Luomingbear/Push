@@ -1,4 +1,4 @@
-package com.bearever.push.handle;
+package com.bearever.push.model;
 
 /**
  * 接收到的推送的消息
@@ -11,17 +11,6 @@ public class ReceiverInfo {
     private String content = ""; //内容
     private String extra = ""; //额外数据
     private Object rawData; //原始数据
-
-    /**
-     * 推送平台
-     */
-    public enum PushTarget {
-        JPUSH, //极光
-
-        XIAOMI, //小米
-
-        HUAWEI; //华为
-    }
 
     public ReceiverInfo() {
     }

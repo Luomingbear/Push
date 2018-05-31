@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.handle.ReceiverInfo;
+import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.ReceiverInfo;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -62,7 +63,7 @@ public class JPushBroadcastReceiver extends BroadcastReceiver {
         info.setTitle(title);
         info.setContent(message);
         info.setExtra(extras);
-        info.setPushTarget(ReceiverInfo.PushTarget.JPUSH);
+        info.setPushTarget(PushTarget.JPUSH);
         info.setRawData(intent);
         return info;
     }
@@ -83,7 +84,7 @@ public class JPushBroadcastReceiver extends BroadcastReceiver {
         info.setTitle(title);
         info.setContent(message);
         info.setExtra(extras);
-        info.setPushTarget(ReceiverInfo.PushTarget.JPUSH);
+        info.setPushTarget(PushTarget.JPUSH);
         info.setRawData(intent);
         return info;
     }

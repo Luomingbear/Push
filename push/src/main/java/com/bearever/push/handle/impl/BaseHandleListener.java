@@ -2,7 +2,7 @@ package com.bearever.push.handle.impl;
 
 import android.content.Context;
 
-import com.bearever.push.handle.ReceiverInfo;
+import com.bearever.push.model.ReceiverInfo;
 
 /**
  * 处理推送的消息

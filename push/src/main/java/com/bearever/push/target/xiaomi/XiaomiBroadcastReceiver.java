@@ -3,7 +3,8 @@ package com.bearever.push.target.xiaomi;
 import android.content.Context;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.handle.ReceiverInfo;
+import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.ReceiverInfo;
 import com.google.gson.Gson;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.MiPushMessage;
@@ -46,7 +47,7 @@ public class XiaomiBroadcastReceiver extends PushMessageReceiver {
     private ReceiverInfo convert2ReceiverInfo(MiPushMessage miPushMessage) {
         ReceiverInfo info = new ReceiverInfo();
         info.setContent(miPushMessage.getContent());
-        info.setPushTarget(ReceiverInfo.PushTarget.XIAOMI);
+        info.setPushTarget(PushTarget.XIAOMI);
         info.setTitle(miPushMessage.getTitle());
         info.setRawData(miPushMessage);
         if (miPushMessage.getExtra() != null) {
@@ -64,8 +65,7 @@ public class XiaomiBroadcastReceiver extends PushMessageReceiver {
     private ReceiverInfo convert2ReceiverInfo(MiPushCommandMessage miPushCommandMessage) {
         ReceiverInfo info = new ReceiverInfo();
         info.setContent(miPushCommandMessage.getCommand());
-        info.setPushTarget(ReceiverInfo.PushTarget.XIAOMI);
-        // TODO: 2018/5/28 设置数据到info里面
+        info.setPushTarget(PushTarget.XIAOMI);
         return info;
     }
 }

@@ -4,15 +4,11 @@ import android.app.Application;
 import android.util.Log;
 
 import com.bearever.push.BuildConfig;
-import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.handle.ReceiverInfo;
-import com.bearever.push.init.BasePushTargetInit;
+import com.bearever.push.target.BasePushTargetInit;
 import com.bearever.push.util.ApplicationUtil;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * 小米推送的初始化

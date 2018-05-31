@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.handle.ReceiverInfo;
+import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.ReceiverInfo;
 import com.huawei.hms.support.api.push.PushReceiver;
 
 /**
@@ -92,7 +93,7 @@ public class HuaweiPushBroadcastReceiver extends PushReceiver {
 
     private ReceiverInfo createReceiverInfo() {
         ReceiverInfo info = new ReceiverInfo();
-        info.setPushTarget(ReceiverInfo.PushTarget.HUAWEI);
+        info.setPushTarget(PushTarget.HUAWEI);
         return info;
     }
 

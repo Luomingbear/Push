@@ -34,6 +34,12 @@ public class ApplicationUtil {
         return value;
     }
 
+    /**
+     * 获取设备id
+     *
+     * @param context
+     * @return
+     */
     public static String getDeviceId(Context context) {
         String androidID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         String id = androidID + Build.SERIAL;

@@ -1,12 +1,8 @@
 package com.bearever.push.target.jiguang;
 
 import android.app.Application;
-import android.content.Context;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.handle.ReceiverInfo;
-import com.bearever.push.init.BasePushTargetInit;
-import com.bearever.push.util.ApplicationUtil;
+import com.bearever.push.target.BasePushTargetInit;
 
 import cn.jpush.android.api.JPushInterface;
 
