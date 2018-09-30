@@ -10,5 +10,9 @@ public enum PushTarget {
 
     XIAOMI, //小米
 
-    HUAWEI; //华为
+    HUAWEI,//华为
+
+    OPPO,//oppo
+
+    MEIZU; //魅族
 }

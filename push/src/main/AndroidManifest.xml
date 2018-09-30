@@ -13,6 +13,9 @@
         android:protectionLevel="signature" />
     <uses-permission android:name="${applicationId}.permission.MIPUSH_RECEIVE" />
 
+    <!--oppo的权限-->
+    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+
     <!--权限-->
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -357,6 +360,25 @@
             android:value="appid=${huaweiPushAppId}"></meta-data>
 
         <!--华为推送 end-->
+
+        <!--OPPO推送 start-->
+        <service
+            android:name=".target.oppo.OppoMessageService"
+            android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">
+            <intent-filter>
+                <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="OPPO_APP_KEY"
+            android:value="${oppoAppKey}" />
+
+        <meta-data
+            android:name="OPPO_APP_SECRET"
+            android:value="${oppoAppSecret}" />
+
+        <!--OPPO推送 end-->
     </application>
 
 </manifest>

@@ -1,9 +1,13 @@
 package com.bearever.push.target.xiaomi;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import com.bearever.push.BuildConfig;
+import com.bearever.push.handle.PushReceiverHandleManager;
+import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.ReceiverInfo;
 import com.bearever.push.target.BasePushTargetInit;
 import com.bearever.push.util.ApplicationUtil;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
@@ -47,4 +51,12 @@ public class XiaomiInit extends BasePushTargetInit {
         }
     }
 
+    @Override
+    public void setAlias(Context context, String alias) {
+        MiPushClient.setAlias(context, alias, null);
+        ReceiverInfo aliasInfo = new ReceiverInfo();
+        aliasInfo.setContent(alias);
+        aliasInfo.setPushTarget(PushTarget.XIAOMI);
+        PushReceiverHandleManager.getInstance().onAliasSet(context, aliasInfo);
+    }
 }

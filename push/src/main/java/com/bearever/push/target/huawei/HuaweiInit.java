@@ -1,6 +1,7 @@
 package com.bearever.push.target.huawei;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.bearever.push.target.BasePushTargetInit;
 import com.huawei.android.hms.agent.HMSAgent;
@@ -15,5 +16,10 @@ public class HuaweiInit extends BasePushTargetInit {
         super(application);
 
         HMSAgent.init(application);
+    }
+
+    @Override
+    public void setAlias(Context context, String alias) {
+        //华为没有设置alias的功能
     }
 }

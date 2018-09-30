@@ -58,3 +58,7 @@
 -keep interface com.huawei.android.hms.agent.common.INoProguard {*;}
 -keep class * extends com.huawei.android.hms.agent.common.INoProguard {*;}
 #华为推送end
+
+#OPPO推送 start
+-keep public class * extends android.app.Service
+#OPPO推送 end

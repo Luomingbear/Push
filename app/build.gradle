@@ -14,12 +14,12 @@ android {
     }
 
     signingConfigs {
-        debug {
-            keyAlias 'pushdemo'
-            keyPassword '123456'
-            storeFile file('E:/AndroidStudioProjects/PushDemo/pushdemo.jks')
-            storePassword '123456'
-        }
+//        debug {
+//            keyAlias 'pushdemo'
+//            keyPassword '123456'
+//            storeFile file('E:/AndroidStudioProjects/PushDemo/pushdemo.jks')
+//            storePassword '123456'
+//        }
     }
 
     buildTypes {
@@ -29,7 +29,7 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.debug
+//            signingConfig signingConfigs.debug
 
         }
 
