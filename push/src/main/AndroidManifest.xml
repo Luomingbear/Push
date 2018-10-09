@@ -16,6 +16,22 @@
     <!--oppo的权限-->
     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
 
+    <!--魅族推送 start-->
+    <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到消息-->
+    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" />
+    <permission
+        android:name="${applicationId}.push.permission.MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="${applicationId}.push.permission.MESSAGE"></uses-permission>
+
+    <!-- 兼容 flyme3.0 配置权限-->
+    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
+    <permission
+        android:name="${applicationId}.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"></permission>
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+    <!--魅族推送  end-->
+
     <!--权限-->
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -379,6 +395,33 @@
             android:value="${oppoAppSecret}" />
 
         <!--OPPO推送 end-->
+
+        <!--魅族推送 start-->
+        <!-- push 应用定义消息 receiver 声明 -->
+        <receiver android:name=".target.meizu.MeizuMessageReceiver">
+            <intent-filter>
+                <!-- 接收 push 消息 -->
+                <action android:name="com.meizu.flyme.push.intent.MESSAGE" />
+                <!-- 接收 register 消息 -->
+                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />
+                <!-- 接收 unregister 消息-->
+                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />
+                <!-- 兼容低版本 Flyme3 推送服务配置 -->
+                <action android:name="com.meizu.c2dm.intent.REGISTRATION" />
+                <action android:name="com.meizu.c2dm.intent.RECEIVE" />
+
+                <category android:name="${applicationId}"></category>
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="MEIZU_APP_ID"
+            android:value="${meizuAppId}" />
+
+        <meta-data
+            android:name="MEIZU_APP_KEY"
+            android:value="${meizuAppKey}" />
+        <!--魅族推送  end-->
     </application>
 
 </manifest>

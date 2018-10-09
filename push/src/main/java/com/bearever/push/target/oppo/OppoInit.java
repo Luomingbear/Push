@@ -37,6 +37,11 @@ public class OppoInit extends BasePushTargetInit {
             //s 注册id，用来唯一标识设备的
             if (i == ErrorCode.SUCCESS) {
                 //注册成功
+                ReceiverInfo info = new ReceiverInfo();
+                info.setContent("Oppo推送注册成功");
+                info.setRawData(s);
+                info.setPushTarget(PushTarget.OPPO);
+                PushReceiverHandleManager.getInstance().onRegistration(mApplication, info);
             } else {
 
             }

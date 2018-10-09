@@ -32,11 +32,18 @@ android {
 //            signingConfig signingConfigs.debug
 
         }
-
     }
+
+    repositories {
+        flatDir {
+            dirs project(':push').file('libs')
+        }
+    }
+
 }
 
 dependencies {
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

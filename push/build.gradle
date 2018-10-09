@@ -12,7 +12,8 @@ android {
                 "xiaomiPushAppId" : "28823037 61517800675",//小米推送的AppID****请务必在数值中间添加一个空格，否则会发生数值变化****
                 "oppoAppKey"      : "9d24177594c741be86465ec9fe490a44",//OPPO推送的appKey
                 "oppoAppSecret"   : "c60bec1f803e49e88037562ec2109286",//OPPO推送的appSecret
-                "meizu"           : "28823037 61517800675",//魅族推送
+                "meizuAppId"      : "28823037 61517800675",//魅族推送AppId
+                "meizuAppKey"     : "28823037 61517800675",//魅族推送AppKey
                 "marketChannel"   : "develops"//渠道
         ]
 
@@ -22,7 +23,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
@@ -34,6 +34,11 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
         }
     }
 }
@@ -50,5 +55,6 @@ dependencies {
     compile files('libs/MiPush_SDK_Client_3_6_2.jar')
     compile files('libs/HMS_SDK_2.6.0.301.jar')
     compile 'com.google.code.gson:gson:2.2.4'
+    compile(name: 'push-internal-3.8.1', ext: 'aar')
 
 }
