@@ -99,12 +99,12 @@ public class PushTargetManager {
     }
 
     /**
-     * 设置别名，华为不可用
+     * 设置别名，华为和魅族不支持，需要监听@link HandleReceiverAlias的handle方法
      *
      * @param context
      * @param alias   别名
      */
-    public void setAliasNotWithHuawei(Context context, String alias) {
+    public void setAlias(Context context, String alias) {
         if (mPushTarget == null) {
             throw new NullPointerException("请先执行init()，然后在设置别名");
         }
