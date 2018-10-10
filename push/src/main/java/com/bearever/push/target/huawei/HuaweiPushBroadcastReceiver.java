@@ -15,7 +15,6 @@ import com.huawei.hms.support.api.push.PushReceiver;
  */
 
 public class HuaweiPushBroadcastReceiver extends PushReceiver {
-    private static final String TAG = "HuaweiPushBroadcastRece";
 
     /**
      * token获取完成；token用于标识设备
@@ -43,7 +42,6 @@ public class HuaweiPushBroadcastReceiver extends PushReceiver {
      */
     @Override
     public boolean onPushMsg(Context context, byte[] msg, Bundle bundle) {
-        Log.i(TAG, "onPushMsg: " + bundle);
         try {
             //CP可以自己解析消息内容，然后做相应的处理
             String content = new String(msg, "UTF-8");

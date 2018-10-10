@@ -1,6 +1,7 @@
 package com.bearever.push.handle.impl;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.bearever.push.model.ReceiverInfo;
 
@@ -10,8 +11,10 @@ import com.bearever.push.model.ReceiverInfo;
  */
 
 public class HandleReceiverNotificationOpened implements BaseHandleListener {
+    private static final String TAG = "HandleReceiverNotificat";
+
     @Override
     public void handle(Context context, ReceiverInfo info) {
-
+        Log.d(TAG, "handle: " + info.getContent());
     }
 }

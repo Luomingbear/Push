@@ -23,7 +23,5 @@ public class HandleReceiverRegistration implements BaseHandleListener {
     @Override
     public void handle(Context context, ReceiverInfo info) {
         Log.i(TAG, "handle: " + info.getContent());
-//        当SDK注册完成之后，自动执行设置别名
-//        setAlias(context, info);
     }
 }
