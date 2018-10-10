@@ -14,6 +14,7 @@ import com.bearever.push.target.jiguang.JPushInit;
 import com.bearever.push.target.meizu.MeizuInit;
 import com.bearever.push.target.oppo.OppoInit;
 import com.bearever.push.target.xiaomi.XiaomiInit;
+import com.coloros.mcssdk.PushManager;
 import com.huawei.android.hms.agent.HMSAgent;
 import com.huawei.android.hms.agent.common.handler.ConnectHandler;
 
@@ -34,6 +35,7 @@ public class PushTargetManager {
     private static PushTargetManager instance;
     private PushTarget mTarget = PushTarget.JPUSH; //当前的推送平台
     private BasePushTargetInit mPushTarget; //当前选择的推送方式
+    private String mAlias = ""; //别名
 
     //设备厂商名
     private static String HUAWEI = "HUAWEI"; //华为
@@ -57,7 +59,7 @@ public class PushTargetManager {
      *
      * @param context
      */
-    public void init(Application context) {
+    public PushTargetManager init(Application context) {
         String mobile_brand = android.os.Build.MANUFACTURER;
         mobile_brand = mobile_brand.toUpperCase();
         //根据设备厂商选择推送平台
@@ -65,19 +67,34 @@ public class PushTargetManager {
         if (XIAOMI.equals(mobile_brand)) {
             this.mTarget = PushTarget.XIAOMI;
             mPushTarget = new XiaomiInit(context);
+            Log.d(TAG, "初始化小米推送");
         } else if (HUAWEI.equals(mobile_brand)) {
             this.mTarget = PushTarget.HUAWEI;
             mPushTarget = new HuaweiInit(context);
+            Log.d(TAG, "初始化华为推送");
         } else if (OPPO.equals(mobile_brand)) {
-            this.mTarget = PushTarget.OPPO;
-            mPushTarget = new OppoInit(context);
+            //有些系统不支持推送服务，需要判断一下
+            if (PushManager.isSupportPush(context)) {
+                this.mTarget = PushTarget.OPPO;
+                mPushTarget = new OppoInit(context);
+                Log.d(TAG, "初始化oppo推送");
+            } else {
+                this.mTarget = PushTarget.JPUSH;
+                mPushTarget = new JPushInit(context);
+                Log.d(TAG, "初始化极光推送");
+            }
         } else if (MEIZU.equals(mobile_brand)) {
             this.mTarget = PushTarget.MEIZU;
             mPushTarget = new MeizuInit(context);
+            Log.d(TAG, "初始化魅族推送");
         } else {
             this.mTarget = PushTarget.JPUSH;
             mPushTarget = new JPushInit(context);
+            Log.d(TAG, "初始化极光推送");
         }
+
+        PushReceiverHandleManager.getInstance().setPushTargetInit(mPushTarget);
+        return this;
     }
 
     /**
@@ -103,16 +120,17 @@ public class PushTargetManager {
     }
 
     /**
-     * 设置别名，华为和魅族不可用，需要通过@link HandleReceiverAlias 的 handle方法回调取得
+     * 设置别名，华为不可用，需要通过@link HandleReceiverAlias 的 handle方法回调取得
      *
-     * @param context
-     * @param alias   别名
+     * @param alias 别名
      */
-    public void setAliasNotWithHuaweiMeizu(Context context, String alias) {
+    public PushTargetManager setAliasNotWithHuawei(String alias) {
         if (mPushTarget == null) {
             throw new NullPointerException("请先执行init()，然后在设置别名");
         }
-        mPushTarget.setAlias(context, alias);
+        mAlias = alias;
+        PushReceiverHandleManager.getInstance().setAlias(mAlias);
+        return this;
     }
 
     /**

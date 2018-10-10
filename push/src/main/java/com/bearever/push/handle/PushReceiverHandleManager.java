@@ -1,6 +1,7 @@
 package com.bearever.push.handle;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.bearever.push.PushTargetManager;
 import com.bearever.push.handle.impl.BaseHandleListener;
@@ -10,6 +11,7 @@ import com.bearever.push.handle.impl.HandleReceiverNotification;
 import com.bearever.push.handle.impl.HandleReceiverNotificationOpened;
 import com.bearever.push.handle.impl.HandleReceiverRegistration;
 import com.bearever.push.model.ReceiverInfo;
+import com.bearever.push.target.BasePushTargetInit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,9 @@ public class PushReceiverHandleManager {
     private BaseHandleListener mNotificationOpenedHandle;
     private BaseHandleListener mSDKRegistrationHandle;
     private BaseHandleListener mAliasSetHandle;
+    private String mAlias = ""; //别名
+    private BasePushTargetInit mPushTargetInit; //推送平台初始化工具
+
     private HashMap<String, PushTargetManager.OnPushReceiverListener> mReceiverMap = new HashMap<>(); //待处理的消息列表
 
     public static PushReceiverHandleManager getInstance() {
@@ -45,8 +50,13 @@ public class PushReceiverHandleManager {
 
     }
 
+    public void setPushTargetInit(BasePushTargetInit pushTargetInit) {
+        this.mPushTargetInit = pushTargetInit;
+    }
+
     /***
      * 用户注册sdk之后的通知
+     * 注册成功自动设置北美
      * @param context
      */
     public void onRegistration(Context context, ReceiverInfo info) {
@@ -61,6 +71,18 @@ public class PushReceiverHandleManager {
             mSDKRegistrationHandle = new HandleReceiverRegistration();
         }
         mSDKRegistrationHandle.handle(context, info);
+        //执行设置别名操作
+        doSetAlias(context);
+    }
+
+    /**
+     * 执行别名设置
+     */
+    private void doSetAlias(Context context) {
+        if (TextUtils.isEmpty(mAlias) || mPushTargetInit == null) {
+            return;
+        }
+        mPushTargetInit.setAlias(context, mAlias);
     }
 
     /**
@@ -165,6 +187,20 @@ public class PushReceiverHandleManager {
      */
     public void clearPushReceiverListener() {
         mReceiverMap.clear();
+    }
+
+    public String getAlias() {
+        return mAlias;
+    }
+
+    /**
+     * 设置别名
+     * 对于华为手机无效，华为手机只能通过返回的token识别用户
+     *
+     * @param mAlias
+     */
+    public void setAlias(String mAlias) {
+        this.mAlias = mAlias;
     }
 
 }
