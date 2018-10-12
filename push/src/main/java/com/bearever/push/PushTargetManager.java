@@ -2,11 +2,9 @@ package com.bearever.push;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.bearever.push.target.BasePushTargetInit;
 import com.bearever.push.target.huawei.HuaweiInit;
@@ -14,18 +12,19 @@ import com.bearever.push.target.jiguang.JPushInit;
 import com.bearever.push.target.meizu.MeizuInit;
 import com.bearever.push.target.oppo.OppoInit;
 import com.bearever.push.target.xiaomi.XiaomiInit;
-import com.coloros.mcssdk.PushManager;
 import com.huawei.android.hms.agent.HMSAgent;
 import com.huawei.android.hms.agent.common.handler.ConnectHandler;
 
 /**
  * 初始化推送服务的管家，根据设备判断初始化哪个平台的推送服务；
  * *********
- * 如果你需要对接收到的信息进行处理，请实现 handle/impl里面的类：
+ * 有两种方式来监听推送消息，一种是是实现handle/impl里面的类的handle方法：
  * HandleReceiverAlias----------------别名设置之后执行
  * HandleReceiverMessage--------------接收到消息之后执行，不会主动显示通知
  * HandleReceiverNotification---------接收到消息之后执行，主动显示通知
  * HandleReceiverNotificationOpened---用户点击了通知之后执行
+ * --------------------
+ * 另外一种是添加回调接口监听，执行@link addPushReceiverListener()添加推送回调接口
  * *********
  * Created by luoming on 2018/5/28.
  */
@@ -33,15 +32,8 @@ import com.huawei.android.hms.agent.common.handler.ConnectHandler;
 public class PushTargetManager {
     private static final String TAG = "PushTargetManager";
     private static PushTargetManager instance;
-    private PushTarget mTarget = PushTarget.JPUSH; //当前的推送平台
+    private PushTargetEnum mTarget = PushTargetEnum.JPUSH; //当前的推送平台
     private BasePushTargetInit mPushTarget; //当前选择的推送方式
-    private String mAlias = ""; //别名
-
-    //设备厂商名
-    private static String HUAWEI = "HUAWEI"; //华为
-    private static String XIAOMI = "XIAOMI"; //小米
-    private static String OPPO = "OPPO"; //oppo
-    private static String MEIZU = "MEIZU"; //魅族
 
     public static PushTargetManager getInstance() {
         if (instance == null) {
@@ -64,33 +56,21 @@ public class PushTargetManager {
         mobile_brand = mobile_brand.toUpperCase();
         //根据设备厂商选择推送平台
         //小米的使用小米推送，华为使用华为推送...其他的使用极光推送
-        if (XIAOMI.equals(mobile_brand)) {
-            this.mTarget = PushTarget.XIAOMI;
+        if (PushTargetEnum.XIAOMI.brand.equals(mobile_brand)) {
+            this.mTarget = PushTargetEnum.XIAOMI;
             mPushTarget = new XiaomiInit(context);
-            Log.d(TAG, "初始化小米推送");
-        } else if (HUAWEI.equals(mobile_brand)) {
-            this.mTarget = PushTarget.HUAWEI;
+        } else if (PushTargetEnum.HUAWEI.brand.equals(mobile_brand)) {
+            this.mTarget = PushTargetEnum.HUAWEI;
             mPushTarget = new HuaweiInit(context);
-            Log.d(TAG, "初始化华为推送");
-        } else if (OPPO.equals(mobile_brand)) {
-            //有些系统不支持推送服务，需要判断一下
-            if (PushManager.isSupportPush(context)) {
-                this.mTarget = PushTarget.OPPO;
-                mPushTarget = new OppoInit(context);
-                Log.d(TAG, "初始化oppo推送");
-            } else {
-                this.mTarget = PushTarget.JPUSH;
-                mPushTarget = new JPushInit(context);
-                Log.d(TAG, "初始化极光推送");
-            }
-        } else if (MEIZU.equals(mobile_brand)) {
-            this.mTarget = PushTarget.MEIZU;
+        } else if (PushTargetEnum.OPPO.brand.equals(mobile_brand)) {
+            this.mTarget = PushTargetEnum.OPPO;
+            mPushTarget = new OppoInit(context);
+        } else if (PushTargetEnum.MEIZU.brand.equals(mobile_brand)) {
+            this.mTarget = PushTargetEnum.MEIZU;
             mPushTarget = new MeizuInit(context);
-            Log.d(TAG, "初始化魅族推送");
         } else {
-            this.mTarget = PushTarget.JPUSH;
+            this.mTarget = PushTargetEnum.JPUSH;
             mPushTarget = new JPushInit(context);
-            Log.d(TAG, "初始化极光推送");
         }
 
         PushReceiverHandleManager.getInstance().setPushTargetInit(mPushTarget);
@@ -102,11 +82,11 @@ public class PushTargetManager {
      *
      * @param activity
      */
+    @Deprecated
     public void initHuaweiPush(Activity activity) {
-        if (getPushTarget() != PushTarget.HUAWEI) {
+        if (getPushTarget() != PushTargetEnum.HUAWEI) {
             return;
         }
-        // TODO: 2018/9/30 失败重试
         HMSAgent.connect(activity, new ConnectHandler() {
             @Override
             public void onConnect(int rst) {
@@ -128,8 +108,7 @@ public class PushTargetManager {
         if (mPushTarget == null) {
             throw new NullPointerException("请先执行init()，然后在设置别名");
         }
-        mAlias = alias;
-        PushReceiverHandleManager.getInstance().setAlias(mAlias);
+        PushReceiverHandleManager.getInstance().setAlias(alias);
         return this;
     }
 
@@ -165,7 +144,7 @@ public class PushTargetManager {
      *
      * @return
      */
-    public PushTarget getPushTarget() {
+    public PushTargetEnum getPushTarget() {
         return this.mTarget;
     }
 

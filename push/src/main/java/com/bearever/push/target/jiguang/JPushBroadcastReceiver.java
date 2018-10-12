@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 
 import cn.jpush.android.api.JPushInterface;
@@ -33,7 +33,9 @@ public class JPushBroadcastReceiver extends BroadcastReceiver {
         if ("cn.jpush.android.intent.REGISTRATION".equals(action)) {
             //用户注册SDK的intent
             ReceiverInfo info = new ReceiverInfo();
-            info.setContent("极光推送注册成功");
+            info.setPushTarget(PushTargetEnum.JPUSH);
+            info.setRawData(intent);
+            info.setTitle("极光推送注册成功");
             PushReceiverHandleManager.getInstance().onRegistration(context, info);
         } else if ("cn.jpush.android.intent.MESSAGE_RECEIVED".equals(action)) {
             //用户接收SDK消息的intent
@@ -63,7 +65,7 @@ public class JPushBroadcastReceiver extends BroadcastReceiver {
         info.setTitle(title);
         info.setContent(message);
         info.setExtra(extras);
-        info.setPushTarget(PushTarget.JPUSH);
+        info.setPushTarget(PushTargetEnum.JPUSH);
         info.setRawData(intent);
         return info;
     }
@@ -84,7 +86,7 @@ public class JPushBroadcastReceiver extends BroadcastReceiver {
         info.setTitle(title);
         info.setContent(message);
         info.setExtra(extras);
-        info.setPushTarget(PushTarget.JPUSH);
+        info.setPushTarget(PushTargetEnum.JPUSH);
         info.setRawData(intent);
         return info;
     }

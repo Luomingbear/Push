@@ -3,6 +3,8 @@ package com.bearever.push.target;
 import android.app.Application;
 import android.content.Context;
 
+import com.bearever.push.model.ReceiverInfo;
+
 /**
  * 初始化推送平台的基类
  * Created by luoming on 2018/5/28.
@@ -28,7 +30,7 @@ public abstract class BasePushTargetInit {
      * @param context
      * @param alias
      */
-    public void setAlias(Context context, String alias) {
+    public void setAlias(Context context, String alias, ReceiverInfo registerInfo) {
         this.mAlias = alias;
     }
 }

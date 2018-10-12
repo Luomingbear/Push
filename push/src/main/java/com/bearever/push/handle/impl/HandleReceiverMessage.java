@@ -15,6 +15,6 @@ public class HandleReceiverMessage implements BaseHandleListener {
 
     @Override
     public void handle(Context context, ReceiverInfo info) {
-        Log.i(TAG, "handle: " + info.getContent());
+        Log.d(TAG, "handle: " + info.getContent());
     }
 }

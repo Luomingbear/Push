@@ -2,9 +2,11 @@ package com.bearever.push.target.oppo;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.bearever.push.target.BasePushTargetInit;
 import com.bearever.push.util.ApplicationUtil;
@@ -23,12 +25,41 @@ import java.util.List;
  * 版本：v1.0
  */
 public class OppoInit extends BasePushTargetInit {
+    private static final String TAG = "OppoInit";
+    private int mCount = 0;
+    private int mAliasCount = 0;
+    private Handler mHandler;
+
+    private Runnable mInitRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mCount++;
+            if (mCount < MAX_RETRY_COUNT) {
+                init();
+            }
+        }
+    };
+
+    private Runnable mAliasRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mAliasCount++;
+            if (mAliasCount < MAX_RETRY_COUNT) {
+                setAlias(mApplication, mAlias, null);
+            }
+        }
+    };
+
     public OppoInit(Application application) {
         super(application);
-        // TODO: 2018/9/30 有些手机不支持推送 目前支持ColorOS3.1及以上的系统
-        String appKey = ApplicationUtil.getMetaData(application, "OPPO_APP_KEY");
-        String appSecret = ApplicationUtil.getMetaData(application, "OPPO_APP_SECRET");
-        PushManager.getInstance().register(application.getApplicationContext(), appKey, appSecret, pushCallback);
+        init();
+        Log.d(TAG, "初始化OPPO推送");
+    }
+
+    private void init() {
+        String appKey = ApplicationUtil.getMetaData(mApplication, "OPPO_APP_KEY");
+        String appSecret = ApplicationUtil.getMetaData(mApplication, "OPPO_APP_SECRET");
+        PushManager.getInstance().register(mApplication, appKey, appSecret, pushCallback);
     }
 
     private PushCallback pushCallback = new PushCallback() {
@@ -38,12 +69,16 @@ public class OppoInit extends BasePushTargetInit {
             if (i == ErrorCode.SUCCESS) {
                 //注册成功
                 ReceiverInfo info = new ReceiverInfo();
-                info.setContent("Oppo推送注册成功");
+                info.setContent(s);
+                info.setTitle("OPPO注册成功");
                 info.setRawData(s);
-                info.setPushTarget(PushTarget.OPPO);
+                info.setPushTarget(PushTargetEnum.OPPO);
                 PushReceiverHandleManager.getInstance().onRegistration(mApplication, info);
             } else {
-
+                if (mHandler == null) {
+                    mHandler = new Handler();
+                }
+                mHandler.postDelayed(mInitRunnable, 1000);
             }
         }
 
@@ -62,9 +97,17 @@ public class OppoInit extends BasePushTargetInit {
             if (i == ErrorCode.SUCCESS) {
                 //成功
                 ReceiverInfo aliasInfo = new ReceiverInfo();
-                aliasInfo.setContent(list.get(0).getContent());
-                aliasInfo.setPushTarget(PushTarget.OPPO);
+                if (list != null && list.size() > 0) {
+                    aliasInfo.setContent(list.get(0).getContent());
+                }
+                aliasInfo.setRawData(list);
+                aliasInfo.setPushTarget(PushTargetEnum.OPPO);
                 PushReceiverHandleManager.getInstance().onAliasSet(mApplication, aliasInfo);
+            } else {
+                if (mHandler == null) {
+                    mHandler = new Handler();
+                }
+                mHandler.postDelayed(mAliasRunnable, 1000);
             }
         }
 
@@ -120,9 +163,12 @@ public class OppoInit extends BasePushTargetInit {
     };
 
     @Override
-    public void setAlias(Context context, String alias) {
-        List<String> list = new ArrayList<>();
-        list.add(alias);
-        PushManager.getInstance().setAliases(list);
+    public void setAlias(Context context, String alias, ReceiverInfo registerInfo) {
+        super.setAlias(context, alias, registerInfo);
+//        别名设置总是失败，索性取消，使用注册id识别用户
+//        List<String> list = new ArrayList<>();
+//        list.add(alias);
+//        PushManager.getInstance().setAliases(list);
+        PushReceiverHandleManager.getInstance().onAliasSet(context, registerInfo);
     }
 }

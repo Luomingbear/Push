@@ -56,7 +56,7 @@ public class PushReceiverHandleManager {
 
     /***
      * 用户注册sdk之后的通知
-     * 注册成功自动设置北美
+     * 注册成功之后设置别名
      * @param context
      */
     public void onRegistration(Context context, ReceiverInfo info) {
@@ -72,17 +72,17 @@ public class PushReceiverHandleManager {
         }
         mSDKRegistrationHandle.handle(context, info);
         //执行设置别名操作
-        doSetAlias(context);
+        doSetAlias(context, info);
     }
 
     /**
      * 执行别名设置
      */
-    private void doSetAlias(Context context) {
+    private void doSetAlias(Context context, ReceiverInfo registerInfo) {
         if (TextUtils.isEmpty(mAlias) || mPushTargetInit == null) {
             return;
         }
-        mPushTargetInit.setAlias(context, mAlias);
+        mPushTargetInit.setAlias(context, mAlias, registerInfo);
     }
 
     /**

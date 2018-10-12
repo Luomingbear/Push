@@ -3,11 +3,9 @@ package com.bearever.push.target.meizu;
 import android.content.Context;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
-import com.bearever.push.util.ApplicationUtil;
 import com.meizu.cloud.pushsdk.MzPushMessageReceiver;
-import com.meizu.cloud.pushsdk.PushManager;
 import com.meizu.cloud.pushsdk.handler.MzPushMessage;
 import com.meizu.cloud.pushsdk.platform.message.PushSwitchStatus;
 import com.meizu.cloud.pushsdk.platform.message.RegisterStatus;
@@ -33,7 +31,7 @@ public class MeizuMessageReceiver extends MzPushMessageReceiver {
     public void onMessage(Context context, String s) {
         //接收服务器推送的透传消息
         ReceiverInfo info = new ReceiverInfo();
-        info.setPushTarget(PushTarget.MEIZU);
+        info.setPushTarget(PushTargetEnum.MEIZU);
         info.setContent(s);
         PushReceiverHandleManager.getInstance().onMessageReceived(context, info);
     }
@@ -53,17 +51,14 @@ public class MeizuMessageReceiver extends MzPushMessageReceiver {
     @Override
     public void onRegisterStatus(Context context, RegisterStatus registerStatus) {
         //调用新版订阅 PushManager.register(context,appId,appKey)回调
-        ReceiverInfo info = new ReceiverInfo();
-        info.setPushTarget(PushTarget.MEIZU);
-        info.setContent("魅族推送注册成功");
-        info.setRawData(registerStatus);
-        PushReceiverHandleManager.getInstance().onRegistration(context, info);
-
-        //由于设置别名需要pushId，所以这里会自动执行设置别名
-        String appid = ApplicationUtil.getMetaData(context, "MEIZU_APP_ID");
-        String appkey = ApplicationUtil.getMetaData(context, "MEIZU_APP_KEY");
-        PushManager.subScribeAlias(context, appid, appkey, registerStatus.getPushId(),
-                ApplicationUtil.getDeviceId(context));
+        if (registerStatus.code.equals(RegisterStatus.SUCCESS_CODE)) {
+            ReceiverInfo info = new ReceiverInfo();
+            info.setPushTarget(PushTargetEnum.MEIZU);
+            info.setTitle("魅族推送注册成功");
+            info.setContent(registerStatus.getPushId());
+            info.setRawData(registerStatus);
+            PushReceiverHandleManager.getInstance().onRegistration(context, info);
+        }
     }
 
     @Override
@@ -80,7 +75,7 @@ public class MeizuMessageReceiver extends MzPushMessageReceiver {
     public void onSubAliasStatus(Context context, SubAliasStatus subAliasStatus) {
         //别名回调
         ReceiverInfo info = new ReceiverInfo();
-        info.setPushTarget(PushTarget.MEIZU);
+        info.setPushTarget(PushTargetEnum.MEIZU);
         info.setContent(subAliasStatus.getAlias());
         info.setRawData(subAliasStatus);
         PushReceiverHandleManager.getInstance().onAliasSet(context, info);
@@ -89,27 +84,27 @@ public class MeizuMessageReceiver extends MzPushMessageReceiver {
     @Override
     public void onNotificationArrived(Context context, MzPushMessage mzPushMessage) {
         //通知栏消息到达回调，flyme6 基于 android6.0 以上不再回调
-        ReceiverInfo info = new ReceiverInfo();
-        info.setPushTarget(PushTarget.MEIZU);
-        info.setContent(mzPushMessage.getContent());
-        info.setTitle(mzPushMessage.getTitle());
-        info.setRawData(mzPushMessage);
-        PushReceiverHandleManager.getInstance().onNotificationReceived(context, info);
+        PushReceiverHandleManager.getInstance().onNotificationReceived(context, createReceiverInfo(mzPushMessage));
     }
 
     @Override
     public void onNotificationClicked(Context context, MzPushMessage mzPushMessage) {
         //通知栏消息点击回调
-        ReceiverInfo info = new ReceiverInfo();
-        info.setPushTarget(PushTarget.MEIZU);
-        info.setContent(mzPushMessage.getContent());
-        info.setTitle(mzPushMessage.getTitle());
-        info.setRawData(mzPushMessage);
-        PushReceiverHandleManager.getInstance().onNotificationOpened(context, info);
+        PushReceiverHandleManager.getInstance().onNotificationOpened(context, createReceiverInfo(mzPushMessage));
     }
 
     @Override
     public void onNotificationDeleted(Context context, MzPushMessage mzPushMessage) {
         //通知栏消息删除回调；flyme6 基于 android6.0 以上不再回调
+    }
+
+    private ReceiverInfo createReceiverInfo(MzPushMessage mzPushMessage) {
+        ReceiverInfo info = new ReceiverInfo();
+        info.setPushTarget(PushTargetEnum.MEIZU);
+        info.setContent(mzPushMessage.getContent());
+        info.setTitle(mzPushMessage.getTitle());
+        info.setExtra(mzPushMessage.getSelfDefineContentString());
+        info.setRawData(mzPushMessage);
+        return info;
     }
 }

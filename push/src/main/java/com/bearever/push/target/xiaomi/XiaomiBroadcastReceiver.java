@@ -3,7 +3,7 @@ package com.bearever.push.target.xiaomi;
 import android.content.Context;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.google.gson.Gson;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -34,7 +34,8 @@ public class XiaomiBroadcastReceiver extends PushMessageReceiver {
     @Override
     public void onReceiveRegisterResult(Context var1, MiPushCommandMessage var2) {
         ReceiverInfo info = convert2ReceiverInfo(var2);
-        info.setContent("小米推送注册成功");
+        info.setTitle("小米推送注册成功");
+        info.setContent(var2.getCommand());
         PushReceiverHandleManager.getInstance().onRegistration(var1, info);
     }
 
@@ -47,7 +48,7 @@ public class XiaomiBroadcastReceiver extends PushMessageReceiver {
     private ReceiverInfo convert2ReceiverInfo(MiPushMessage miPushMessage) {
         ReceiverInfo info = new ReceiverInfo();
         info.setContent(miPushMessage.getContent());
-        info.setPushTarget(PushTarget.XIAOMI);
+        info.setPushTarget(PushTargetEnum.XIAOMI);
         info.setTitle(miPushMessage.getTitle());
         info.setRawData(miPushMessage);
         if (miPushMessage.getExtra() != null) {
@@ -65,7 +66,8 @@ public class XiaomiBroadcastReceiver extends PushMessageReceiver {
     private ReceiverInfo convert2ReceiverInfo(MiPushCommandMessage miPushCommandMessage) {
         ReceiverInfo info = new ReceiverInfo();
         info.setContent(miPushCommandMessage.getCommand());
-        info.setPushTarget(PushTarget.XIAOMI);
+        info.setRawData(miPushCommandMessage);
+        info.setPushTarget(PushTargetEnum.XIAOMI);
         return info;
     }
 }

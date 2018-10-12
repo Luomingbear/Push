@@ -3,7 +3,9 @@ package com.bearever.push.target.huawei;
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
+import com.bearever.push.model.ReceiverInfo;
 import com.bearever.push.target.BasePushTargetInit;
 import com.huawei.android.hms.agent.HMSAgent;
 
@@ -13,6 +15,7 @@ import com.huawei.android.hms.agent.HMSAgent;
  */
 
 public class HuaweiInit extends BasePushTargetInit {
+    private static final String TAG = "HuaweiInit";
     private int mCount = 0;
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -29,6 +32,8 @@ public class HuaweiInit extends BasePushTargetInit {
     public HuaweiInit(Application application) {
         super(application);
         init();
+        Log.d(TAG, "初始化华为推送");
+
     }
 
     private void init() {
@@ -41,7 +46,7 @@ public class HuaweiInit extends BasePushTargetInit {
     }
 
     @Override
-    public void setAlias(Context context, String alias) {
+    public void setAlias(Context context, String alias, ReceiverInfo registerInfo) {
         //华为没有设置alias的功能
     }
 }

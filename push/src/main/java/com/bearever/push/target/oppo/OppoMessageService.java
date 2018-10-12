@@ -1,9 +1,10 @@
 package com.bearever.push.target.oppo;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.coloros.mcssdk.PushService;
 import com.coloros.mcssdk.mode.AppMessage;
@@ -17,6 +18,7 @@ import com.coloros.mcssdk.mode.SptDataMessage;
  * 版本：v1.0
  */
 public class OppoMessageService extends PushService {
+    private static final String TAG = "OppoMessageService";
 
     /**
      * 普通应用消息
@@ -27,10 +29,11 @@ public class OppoMessageService extends PushService {
     @Override
     public void processMessage(Context context, AppMessage appMessage) {
         super.processMessage(context, appMessage);
+        Log.d(TAG, "app processMessage: handle:" + appMessage);
         ReceiverInfo info = new ReceiverInfo();
         info.setTitle(appMessage.getTitle());
         info.setContent(appMessage.getContent());
-        info.setPushTarget(PushTarget.OPPO);
+        info.setPushTarget(PushTargetEnum.OPPO);
         info.setRawData(appMessage);
         PushReceiverHandleManager.getInstance().onNotificationReceived(context, info);
     }
@@ -44,10 +47,11 @@ public class OppoMessageService extends PushService {
     @Override
     public void processMessage(Context context, SptDataMessage sptDataMessage) {
         super.processMessage(context, sptDataMessage);
+        Log.d(TAG, "spt processMessage: handle:" + sptDataMessage);
         ReceiverInfo info = new ReceiverInfo();
         info.setContent(sptDataMessage.getContent());
         info.setExtra(sptDataMessage.getDescription());
-        info.setPushTarget(PushTarget.OPPO);
+        info.setPushTarget(PushTargetEnum.OPPO);
         info.setRawData(sptDataMessage);
         PushReceiverHandleManager.getInstance().onMessageReceived(context, info);
     }
@@ -61,6 +65,6 @@ public class OppoMessageService extends PushService {
     @Override
     public void processMessage(Context context, CommandMessage commandMessage) {
         super.processMessage(context, commandMessage);
-
+        Log.d(TAG, "command processMessage: " + commandMessage);
     }
 }

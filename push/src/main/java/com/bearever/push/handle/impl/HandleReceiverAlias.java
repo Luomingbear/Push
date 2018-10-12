@@ -11,11 +11,11 @@ import com.bearever.push.model.ReceiverInfo;
  */
 
 public class HandleReceiverAlias implements BaseHandleListener {
-    private static final String TAG = "HandleReceiverAlias";
+    private static final String TAG = "PushHandleReceiverAlias";
 
     @Override
     public void handle(Context context, ReceiverInfo info) {
-        Log.i(TAG, "handle: " + info.getContent());
-        // TODO: 2018/5/29 上传别名
+        Log.d(TAG, "handle: " + info.getContent());
+
     }
 }

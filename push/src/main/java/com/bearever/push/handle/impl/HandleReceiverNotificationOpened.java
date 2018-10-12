@@ -11,7 +11,7 @@ import com.bearever.push.model.ReceiverInfo;
  */
 
 public class HandleReceiverNotificationOpened implements BaseHandleListener {
-    private static final String TAG = "HandleReceiverNotificat";
+    private static final String TAG = "HandleReceiverNotiOpen";
 
     @Override
     public void handle(Context context, ReceiverInfo info) {

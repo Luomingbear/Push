@@ -2,6 +2,10 @@ package com.bearever.push.target.jiguang;
 
 import android.content.Context;
 
+import com.bearever.push.handle.PushReceiverHandleManager;
+import com.bearever.push.model.PushTargetEnum;
+import com.bearever.push.model.ReceiverInfo;
+
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
 
@@ -11,6 +15,8 @@ import cn.jpush.android.service.JPushMessageReceiver;
  */
 
 public class IJPushEventReceiver extends JPushMessageReceiver {
+    private static final String TAG = "IJPushEventReceiver";
+
     @Override
     public void onTagOperatorResult(Context var1, JPushMessage var2) {
     }
@@ -22,7 +28,11 @@ public class IJPushEventReceiver extends JPushMessageReceiver {
 
     @Override
     public void onAliasOperatorResult(Context var1, JPushMessage var2) {
-
+        ReceiverInfo aliasInfo = new ReceiverInfo();
+        aliasInfo.setContent(var2.getAlias());
+        aliasInfo.setPushTarget(PushTargetEnum.JPUSH);
+        aliasInfo.setRawData(var2);
+        PushReceiverHandleManager.getInstance().onAliasSet(var1, aliasInfo);
     }
 
     @Override

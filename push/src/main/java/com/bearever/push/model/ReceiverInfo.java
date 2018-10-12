@@ -6,7 +6,7 @@ package com.bearever.push.model;
  */
 
 public class ReceiverInfo {
-    private PushTarget pushTarget = PushTarget.JPUSH; //推送平台
+    private PushTargetEnum pushTarget = PushTargetEnum.JPUSH; //推送平台
     private String title = ""; //标题
     private String content = ""; //内容
     private String extra = ""; //额外数据
@@ -15,7 +15,7 @@ public class ReceiverInfo {
     public ReceiverInfo() {
     }
 
-    public ReceiverInfo(PushTarget pushTarget, String title, String content, String extra,
+    public ReceiverInfo(PushTargetEnum pushTarget, String title, String content, String extra,
                         Object rawData) {
         this.pushTarget = pushTarget;
         this.title = title;
@@ -32,11 +32,11 @@ public class ReceiverInfo {
         this.title = title;
     }
 
-    public PushTarget getPushTarget() {
+    public PushTargetEnum getPushTarget() {
         return pushTarget;
     }
 
-    public void setPushTarget(PushTarget pushTarget) {
+    public void setPushTarget(PushTargetEnum pushTarget) {
         this.pushTarget = pushTarget;
     }
 

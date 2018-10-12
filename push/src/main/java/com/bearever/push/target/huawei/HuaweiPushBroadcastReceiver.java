@@ -2,10 +2,9 @@ package com.bearever.push.target.huawei;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.bearever.push.handle.PushReceiverHandleManager;
-import com.bearever.push.model.PushTarget;
+import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.huawei.hms.support.api.push.PushReceiver;
 
@@ -84,14 +83,14 @@ public class HuaweiPushBroadcastReceiver extends PushReceiver {
     public void onPushState(Context context, boolean pushState) {
         if (pushState) {
             ReceiverInfo info = createReceiverInfo();
-            info.setContent("华为推送注册成功");
+            info.setTitle("华为推送注册成功");
             PushReceiverHandleManager.getInstance().onRegistration(context, info);
         }
     }
 
     private ReceiverInfo createReceiverInfo() {
         ReceiverInfo info = new ReceiverInfo();
-        info.setPushTarget(PushTarget.HUAWEI);
+        info.setPushTarget(PushTargetEnum.HUAWEI);
         return info;
     }
 
