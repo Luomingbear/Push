@@ -18,9 +18,7 @@
 
 ### 2.配置华为推送
 
-华为推送的SDK是通过工具生成的，所以需要手动配置生成代码，可以参考官网教程：[华为推送官网教程](http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_devprepare_agent)
-
-将生成的代码复制到Push的java目录下面，res资源文件根据需要添加到资源目录下。
+华为推送的SDK是通过工具生成的，所以需要手动配置生成代码，先[下载华为HMS Agent套件](https://obs.cn-north-2.myhwclouds.com/hms-ds-wf/sdk/HMSAgent_2.6.1.302.zip)，解压出来之后根据自己的电脑系统需要相应的脚本文件，例如：Window点击双击`GetHMSAgent_cn.bat`在弹出的窗口里面根据提示操作就好了，最后生存的代码会保存在`copysrc`文件夹里面。将生成的代码复制到Push的java目录下面，res资源文件根据需要添加到资源目录下。
 
 ### 3.初始化
 
@@ -36,13 +34,15 @@
 
 ### 5.处理用户点击通知栏
 
-针对用户点击通知栏的行为，我们可能需要对通知进行处理跳转到指定的页面，在非华为设备上面，只需要实现`HandleReceiverNotificationOpened`的`handle`方法。在华为的设备上面，普通的Notification发送之后不会执行到`HandleReceiverMessage`，也没有点击之后的`HandleReceiverNotificationOpened`,但是，系统默认实现了点击通知打开App的功能，如需要实现点击通知到指定页面，请选择**透传消息**。
+针对用户点击通知栏的行为，我们可能需要对通知进行处理跳转到指定的页面。当有用户点击通知栏的时候`HandleReceiverNotificationOpened`的`handle`会执行，我们只需要在这里处理就可以了。**需要注意的是，华为和OPPO的事件处理使用的是一个虚拟的Activity进行中转。 **因为无法监听到用户点击的事件，但是可以在点击之后打开的页面里面获取到传递的数据，间接的进行处理。所以使用的时候需要和后端协商好推送类型为自定义参数的格式。
+
+> OPPO和华为的处理Activity分别为`OppoLoadActivity`、`HuaweiLoadActivity`具体的intent设置请按照自己的需求修改。
 
 ![微信截图_20180530160745](img/微信截图_20180531111009.png)
 
 ### 6.设置别名
 
-为了区别不同的设备与账号的对应关系，需要将设备别名设置到推送服务器和自己应用的服务器。* 当然，如果你不需要知道具体用户对于的设备，也可以不处理 *。 **别名的设置需要执行`PushTargetManager`的`setAlias`, **建议在注册成功之后在执行设置别名的操作，即在`HandleReceiverRegistration`的`handle`里面执行。 **需要注意的是华为推送不支持设置别名，只能获取华为服务器返回的`token`。对于将别名上传到服务器的操作，用户只需要在`HandleReceiverAlias`类实现`handle`方法就可以了。
+为了区别不同的设备与账号的对应关系，需要将设备别名设置到推送服务器和自己应用的服务器。* 当然，如果你不需要知道具体用户对于的设备，也可以不处理 *。 **别名的设置需要执行`PushTargetManager`的`setAlias`, **建议在注册成功之后再执行设置别名的操作，即在`HandleReceiverRegistration`的`handle`里面执行。 **需要注意的是华为推送不支持设置别名，只能获取华为服务器返回的`token` **。对于将别名上传到服务器的操作，用户只需要在`HandleReceiverAlias`类实现`handle`方法就可以了。
 
 ![微信截图_20180530152949](img/微信截图_20180531111115.png)
 

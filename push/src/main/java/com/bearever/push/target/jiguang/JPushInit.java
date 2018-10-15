@@ -24,7 +24,7 @@ public class JPushInit extends BasePushTargetInit {
     }
 
     @Override
-    public void setAlias(final Context context, String alias, ReceiverInfo registerInfo) {
+    public void setAlias(Context context, String alias, ReceiverInfo registerInfo) {
         JPushInterface.setAlias(context, 0, alias);
     }
 }

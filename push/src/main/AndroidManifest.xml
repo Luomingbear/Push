@@ -15,6 +15,7 @@
 
     <!--oppo的权限-->
     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <uses-permission android:name="com.coloros.mcs.permission.SEND_MCS_MESSAGE" />
 
     <!--魅族推送 start-->
     <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到消息-->
@@ -40,10 +41,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
 
     <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
@@ -59,11 +61,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true">
 
         <!--极光推送-start-->
         <!-- Required SDK 核心功能-->
@@ -268,8 +267,24 @@
         <!--小米推送 end-->
 
         <!--华为推送 start-->
+        <!--处理推送的自定义信息的activity-->
+        <activity
+            android:name=".target.huawei.HuaweiLoadActivity"
+            android:theme="@style/LoadTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="router"
+                    android:path="/huawei"
+                    android:scheme="ipush" />
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="appid=${huaweiPushAppId}" />
 
-        <!-- 接入HMSSDK 需要注册的provider，authorities 一定不能与其他应用一样，所以这边 com.bearever.pushdemo 要替换上您应用的包名
+        <!-- 接入HMSSDK 需要注册的provider，authorities 一定不能与其他应用一样，所以这边 ${applicationId} 要替换上您应用的包名
             Access HMSSDK need to register provider,authorities must not be the same as other applications, so this side ${package_name} to replace the package name you applied-->
         <provider
             android:name="com.huawei.hms.update.provider.UpdateProvider"
@@ -277,7 +292,7 @@
             android:exported="false"
             android:grantUriPermissions="true" />
 
-        <!-- 接入HMSSDK 需要注册的provider，authorities 一定不能与其他应用一样，所以这边 com.bearever.pushdemo 要替换上您应用的包名
+        <!-- 接入HMSSDK 需要注册的provider，authorities 一定不能与其他应用一样，所以这边 ${applicationId} 要替换上您应用的包名
             Access HMSSDK need to register provider,authorities must not be the same as other applications, so this side ${package_name} to replace the package name you applied-->
         <provider
             android:name="com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider"
@@ -285,10 +300,7 @@
             android:exported="false"
             android:grantUriPermissions="true"></provider>
 
-        <!-- 应用下载服务 -->
-        <service
-            android:name="com.huawei.updatesdk.service.deamon.download.DownloadService"
-            android:exported="false" />
+        <!--<activity android:name=".OpendeviceActivity"/>-->
 
         <!-- 使用 HMSAgent 代码接入HMSSDK 需要注册的activity | Use hmsagent code to access HMSSDK activity that requires registration-->
         <activity
@@ -302,7 +314,6 @@
                 android:name="hwc-theme"
                 android:value="androidhwext:style/Theme.Emui.Translucent" />
         </activity>
-
 
         <!-- 接入HMSSDK 需要注册的activity | Access HMSSDK activity to be registered-->
         <activity
@@ -371,13 +382,18 @@
             android:name="com.huawei.updatesdk.service.deamon.download.DownloadService"
             android:exported="false" />
 
-        <meta-data
-            android:name="com.huawei.hms.client.appid"
-            android:value="appid=${huaweiPushAppId}"></meta-data>
-
         <!--华为推送 end-->
 
         <!--OPPO推送 start-->
+        <activity
+            android:name=".target.oppo.OppoLoadActivity"
+            android:theme="@style/LoadTheme">
+            <intent-filter>
+                <action android:name="ipush.router.oppo" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".target.oppo.OppoMessageService"
             android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">

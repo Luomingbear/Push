@@ -24,7 +24,7 @@ public class XiaomiInit extends BasePushTargetInit {
         //注册SDK
         String appId = ApplicationUtil.getMetaData(context, "XMPUSH_APPID");
         String appKey = ApplicationUtil.getMetaData(context, "XMPUSH_APPKEY");
-        MiPushClient.registerPush(context, appId.replace(" ", ""), appKey.replace(" ", ""));
+        MiPushClient.registerPush(context, appId.replaceAll(" ", ""), appKey.replaceAll(" ", ""));
         Log.d(TAG, "初始化小米推送");
     }
 
