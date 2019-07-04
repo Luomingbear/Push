@@ -8,11 +8,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.bearever.push.PushTargetManager;
 import com.huawei.android.hms.agent.common.ActivityMgr;
 import com.huawei.android.hms.agent.common.ApiClientMgr;
 import com.huawei.android.hms.agent.common.HMSAgentLog;
-import com.huawei.android.hms.agent.common.INoProguard;
 import com.huawei.android.hms.agent.common.IClientConnectCallback;
+import com.huawei.android.hms.agent.common.INoProguard;
 import com.huawei.android.hms.agent.common.handler.ConnectHandler;
 import com.huawei.android.hms.agent.push.DeleteTokenApi;
 import com.huawei.android.hms.agent.push.EnableReceiveNormalMsgApi;
@@ -212,6 +213,17 @@ public final class HMSAgent implements INoProguard {
         // 初始化HuaweiApiClient管理类 | Initialize Huaweiapiclient Management class
         ApiClientMgr.INST.init(appTmp);
 
+        HMSAgent.connect(new ConnectHandler() {
+            @Override
+            public void onConnect(int rst) {
+                if (rst == HMSAgent.AgentResultCode.HMSAGENT_SUCCESS) {
+                    //连接成功就获取token和设置打开推送等
+                    HMSAgent.Push.getPushState(null);
+                    HMSAgent.Push.getToken(null);
+                }
+            }
+        });
+
         return true;
     }
 
@@ -231,7 +243,7 @@ public final class HMSAgent implements INoProguard {
      * @param activity 当前界面的activity， 不能传空 | Activity of the current activity, cannot be empty
      * @param callback 连接结果回调 | Connection Result Callback
      */
-    public static void connect(Activity activity, final ConnectHandler callback) {
+    public static void connect(final ConnectHandler callback) {
         HMSAgentLog.i("start connect");
         ApiClientMgr.INST.connect(new IClientConnectCallback() {
             @Override

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 
@@ -30,20 +30,25 @@ public class JPushBroadcastReceiver extends BroadcastReceiver {
             return;
         }
 
-        if ("cn.jpush.android.intent.REGISTRATION".equals(action)) {
+        if (JPushInterface.ACTION_REGISTRATION_ID.equals(action)) {
             //用户注册SDK的intent
             ReceiverInfo info = new ReceiverInfo();
             info.setPushTarget(PushTargetEnum.JPUSH);
             info.setRawData(intent);
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String code = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID, "");
+                info.setContent(code);
+            }
             info.setTitle("极光推送注册成功");
             PushReceiverHandleManager.getInstance().onRegistration(context, info);
-        } else if ("cn.jpush.android.intent.MESSAGE_RECEIVED".equals(action)) {
+        } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(action)) {
             //用户接收SDK消息的intent
             PushReceiverHandleManager.getInstance().onMessageReceived(context, convert2MessageReceiverInfo(intent));
-        } else if ("cn.jpush.android.intent.NOTIFICATION_RECEIVED".equals(action)) {
+        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(action)) {
             //用户接收SDK通知栏信息的intent
             PushReceiverHandleManager.getInstance().onNotificationReceived(context, convert2NotificationReceiverInfo(intent));
-        } else if ("cn.jpush.android.intent.NOTIFICATION_OPENED".equals(action)) {
+        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(action)) {
             //用户打开自定义通知栏的intent
             PushReceiverHandleManager.getInstance().onNotificationOpened(context, convert2NotificationReceiverInfo(intent));
         }

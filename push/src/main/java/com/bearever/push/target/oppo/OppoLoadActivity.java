@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 

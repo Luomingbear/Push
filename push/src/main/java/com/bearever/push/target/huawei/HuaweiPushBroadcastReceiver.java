@@ -2,8 +2,10 @@ package com.bearever.push.target.huawei;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
+import com.bearever.push.PushTargetManager;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.huawei.hms.support.api.push.PushReceiver;
@@ -28,7 +30,9 @@ public class HuaweiPushBroadcastReceiver extends PushReceiver {
         ReceiverInfo alias = createReceiverInfo();
         alias.setContent(token);
         alias.setRawData(extras);
+        PushReceiverHandleManager.getInstance().onRegistration(context, alias);
         PushReceiverHandleManager.getInstance().onAliasSet(context, alias);
+        Log.e("华为token", token + "    -----------------------");
     }
 
     /**
@@ -81,11 +85,11 @@ public class HuaweiPushBroadcastReceiver extends PushReceiver {
      */
     @Override
     public void onPushState(Context context, boolean pushState) {
-        if (pushState) {
-            ReceiverInfo info = createReceiverInfo();
-            info.setTitle("华为推送注册成功");
-            PushReceiverHandleManager.getInstance().onRegistration(context, info);
-        }
+//        if (pushState) {
+//            ReceiverInfo info = createReceiverInfo();
+//            info.setTitle("华为推送注册成功");
+//            PushReceiverHandleManager.getInstance().onRegistration(context, info);
+//        }
     }
 
     private ReceiverInfo createReceiverInfo() {

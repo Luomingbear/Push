@@ -1,39 +1,59 @@
-package com.bearever.push.handle;
+package com.bearever.push.receiver;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.bearever.push.PushTargetManager;
-import com.bearever.push.handle.impl.BaseHandleListener;
-import com.bearever.push.handle.impl.HandleReceiverAlias;
-import com.bearever.push.handle.impl.HandleReceiverMessage;
-import com.bearever.push.handle.impl.HandleReceiverNotification;
-import com.bearever.push.handle.impl.HandleReceiverNotificationOpened;
-import com.bearever.push.handle.impl.HandleReceiverRegistration;
 import com.bearever.push.model.ReceiverInfo;
 import com.bearever.push.target.BasePushTargetInit;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * 统一处理收到的推送
  * Created by luoming on 2018/5/28.
  */
-
 public class PushReceiverHandleManager {
     private static final String TAG = "PushReceiverHandleManag";
     private static PushReceiverHandleManager instance;
 
-    private BaseHandleListener mMessageHandle;
-    private BaseHandleListener mNotificationHandle;
-    private BaseHandleListener mNotificationOpenedHandle;
-    private BaseHandleListener mSDKRegistrationHandle;
-    private BaseHandleListener mAliasSetHandle;
-    private String mAlias = ""; //别名
-    private BasePushTargetInit mPushTargetInit; //推送平台初始化工具
+    private String mAlias = "";
+    private BasePushTargetInit mPushTargetInit;
 
-    private HashMap<String, PushTargetManager.OnPushReceiverListener> mReceiverMap = new HashMap<>(); //待处理的消息列表
+    /**
+     * 待处理的消息列表
+     */
+    private HashMap<String, PushTargetManager.OnPushReceiverListener> mReceiverMap = new HashMap<>();
+
+    /**
+     * 注册行为
+     */
+    public static final int TYPE_REGISTRATION = 0;
+    /**
+     * 设置别名行为
+     */
+    public static final int TYPE_ALIAS = TYPE_REGISTRATION + 1;
+    /**
+     * 收到自定义消息行为
+     */
+    public static final int TYPE_MESSAGE = TYPE_ALIAS + 1;
+    /**
+     * 收到通知行为
+     */
+    public static final int TYPE_NOTIFICATION = TYPE_MESSAGE + 1;
+    /**
+     * 点击通知行为
+     */
+    public static final int TYPE_OPEN = TYPE_NOTIFICATION + 1;
 
     public static PushReceiverHandleManager getInstance() {
         if (instance == null) {
@@ -54,6 +74,49 @@ public class PushReceiverHandleManager {
         this.mPushTargetInit = pushTargetInit;
     }
 
+    /**
+     * 发送广播
+     *
+     * @param context
+     * @param type    行为类型
+     * @param info
+     */
+    private void sendBroadcast(Context context, int type, ReceiverInfo info) {
+        Log.d(TAG, "发送广播\nPackageName:" + context.getPackageName() + "\n" + info.toString());
+        Intent intent = new Intent();
+        intent.putExtra("receiverinfo", new Gson().toJson(info));
+        intent.putExtra("type", type);
+        intent.putExtra("pushTarget", info.getPushTarget());
+        intent.setAction(PushTargetManager.ACTION);
+
+        //Android O 之后限制了隐式广播的接收，需要主动注册接收器
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            context.sendBroadcast(intent, context.getPackageName() + PushTargetManager.PERMISSION);
+        } else {
+            sendImplicitBroadcast(context, intent);
+        }
+    }
+
+    /**
+     * 发送隐式广播
+     *
+     * @param ctxt
+     * @param i
+     */
+    private static void sendImplicitBroadcast(Context ctxt, Intent i) {
+        PackageManager pm = ctxt.getPackageManager();
+        List<ResolveInfo> matches = pm.queryBroadcastReceivers(i, 0);
+
+        for (ResolveInfo resolveInfo : matches) {
+            Intent explicit = new Intent(i);
+            ComponentName cn =
+                    new ComponentName(resolveInfo.activityInfo.applicationInfo.packageName,
+                            resolveInfo.activityInfo.name);
+            explicit.setComponent(cn);
+            ctxt.sendBroadcast(explicit, ctxt.getPackageName() + PushTargetManager.PERMISSION);
+        }
+    }
+
     /***
      * 用户注册sdk之后的通知
      * 注册成功之后设置别名
@@ -67,12 +130,11 @@ public class PushReceiverHandleManager {
             }
         }
 
-        if (mSDKRegistrationHandle == null) {
-            mSDKRegistrationHandle = new HandleReceiverRegistration();
-        }
-        mSDKRegistrationHandle.handle(context, info);
         //执行设置别名操作
         doSetAlias(context, info);
+
+        //发送广播
+        sendBroadcast(context, TYPE_REGISTRATION, info);
     }
 
     /**
@@ -98,10 +160,9 @@ public class PushReceiverHandleManager {
                 listener.onAlias(info);
             }
         }
-        if (mAliasSetHandle == null) {
-            mAliasSetHandle = new HandleReceiverAlias();
-        }
-        mAliasSetHandle.handle(context, info);
+
+        //发送广播
+        sendBroadcast(context, TYPE_ALIAS, info);
     }
 
     /**
@@ -117,10 +178,9 @@ public class PushReceiverHandleManager {
                 listener.onMessage(info);
             }
         }
-        if (mMessageHandle == null) {
-            mMessageHandle = new HandleReceiverMessage();
-        }
-        mMessageHandle.handle(context, info);
+
+        //发送广播
+        sendBroadcast(context, TYPE_MESSAGE, info);
     }
 
     /**
@@ -136,10 +196,9 @@ public class PushReceiverHandleManager {
                 listener.onNotification(info);
             }
         }
-        if (mNotificationHandle == null) {
-            mNotificationHandle = new HandleReceiverNotification();
-        }
-        mNotificationHandle.handle(context, info);
+
+        //发送广播
+        sendBroadcast(context, TYPE_NOTIFICATION, info);
     }
 
     /**
@@ -155,10 +214,9 @@ public class PushReceiverHandleManager {
                 listener.onOpened(info);
             }
         }
-        if (mNotificationOpenedHandle == null) {
-            mNotificationOpenedHandle = new HandleReceiverNotificationOpened();
-        }
-        mNotificationOpenedHandle.handle(context, info);
+
+        //发送广播
+        sendBroadcast(context, TYPE_OPEN, info);
     }
 
     /**

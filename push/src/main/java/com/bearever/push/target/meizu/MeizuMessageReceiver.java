@@ -2,7 +2,7 @@ package com.bearever.push.target.meizu;
 
 import android.content.Context;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.meizu.cloud.pushsdk.MzPushMessageReceiver;

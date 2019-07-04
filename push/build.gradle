@@ -7,13 +7,15 @@ android {
     defaultConfig {
         manifestPlaceholders = [
                 "jPushAppkey"     : "ea6c961e572ad972df4ef456",//极光推送的AppKey
-                "huaweiPushAppId" : "100294621",//华为推送的AppId
-                "xiaomiPushAppkey": "57417800 14675",//小米推送的AppKey****请务必在数值中间添加一个空格，否则会发生数值变化****
-                "xiaomiPushAppId" : "28823037 61517800675",//小米推送的AppID****请务必在数值中间添加一个空格，否则会发生数值变化****
+                "huaweiPushAppId" : "100698925",//华为推送的AppId
+                "xiaomiPushAppkey": "55617974 54571",//"57417800 14675",//小米推送的AppKey****请务必在数值中间添加一个空格，否则会发生数值变化****
+                "xiaomiPushAppId" : "28823037 61517974571",//"28823037 61517800675",//小米推送的AppID****请务必在数值中间添加一个空格，否则会发生数值变化****
                 "oppoAppKey"      : "9d24177594c741be86465ec9fe490a44",//OPPO推送的appKey
                 "oppoAppSecret"   : "c60bec1f803e49e88037562ec2109286",//OPPO推送的appSecret
-                "meizuAppId"      : "110 56",//魅族推送AppId ****请务必在数值中间添加一个空格，否则会发生数值变化****
-                "meizuAppKey"     : "a5e22f09822b48f982a19be213a2617c",//魅族推送AppKey
+                "meizuAppId"      : "1200 55",//魅族推送AppId ****请务必在数值中间添加一个空格，否则会发生数值变化****
+                "meizuAppKey"     : "3aca7449444347c4a1d2a70826ae1e9b",//魅族推送AppKey
+                "vivoAppId"       : "11937",//vivo推送AppId
+                "vivoAppKey"      : "acfdb480-e178-4098-80ae-76284df7d588",//vivo推送AppKey
                 "marketChannel"   : "develops"//渠道
         ]
 

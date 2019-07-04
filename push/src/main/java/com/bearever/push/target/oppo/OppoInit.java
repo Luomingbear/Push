@@ -5,9 +5,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 import com.bearever.push.target.BasePushTargetInit;
 import com.bearever.push.util.ApplicationUtil;
 import com.coloros.mcssdk.PushManager;
@@ -15,7 +15,6 @@ import com.coloros.mcssdk.callback.PushCallback;
 import com.coloros.mcssdk.mode.ErrorCode;
 import com.coloros.mcssdk.mode.SubscribeResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,16 +25,16 @@ import java.util.List;
  */
 public class OppoInit extends BasePushTargetInit {
     private static final String TAG = "OppoInit";
-    private int mCount = 0;
+    private int mInitCount = 0;
     private int mAliasCount = 0;
     private Handler mHandler;
 
     private Runnable mInitRunnable = new Runnable() {
         @Override
         public void run() {
-            mCount++;
-            if (mCount < MAX_RETRY_COUNT) {
+            if (mInitCount < MAX_RETRY_COUNT) {
                 init();
+                mInitCount++;
             }
         }
     };
@@ -43,15 +42,18 @@ public class OppoInit extends BasePushTargetInit {
     private Runnable mAliasRunnable = new Runnable() {
         @Override
         public void run() {
-            mAliasCount++;
             if (mAliasCount < MAX_RETRY_COUNT) {
                 setAlias(mApplication, mAlias, null);
+                mAliasCount++;
             }
         }
     };
 
     public OppoInit(Application application) {
         super(application);
+        if (!PushManager.isSupportPush(application)) {
+            return;
+        }
         init();
         Log.d(TAG, "初始化OPPO推送");
     }

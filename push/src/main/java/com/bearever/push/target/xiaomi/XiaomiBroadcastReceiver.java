@@ -1,11 +1,13 @@
 package com.bearever.push.target.xiaomi;
 
 import android.content.Context;
+import android.util.Log;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 import com.google.gson.Gson;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
@@ -28,15 +30,21 @@ public class XiaomiBroadcastReceiver extends PushMessageReceiver {
 
     @Override
     public void onNotificationMessageArrived(Context var1, MiPushMessage var2) {
+        Log.e("接收消息成功", "------------------------");
         PushReceiverHandleManager.getInstance().onNotificationReceived(var1, convert2ReceiverInfo(var2));
     }
 
     @Override
-    public void onReceiveRegisterResult(Context var1, MiPushCommandMessage var2) {
-        ReceiverInfo info = convert2ReceiverInfo(var2);
-        info.setTitle("小米推送注册成功");
-        info.setContent(var2.getCommand());
-        PushReceiverHandleManager.getInstance().onRegistration(var1, info);
+    public void onReceiveRegisterResult(Context var1, MiPushCommandMessage command) {
+        if (MiPushClient.COMMAND_REGISTER.equals(command.getCommand())) {
+            ReceiverInfo info = convert2ReceiverInfo(command);
+            info.setTitle("小米推送注册成功");
+            //注册id
+            String id = command.getCommandArguments().get(0);
+            info.setContent(id);
+            Log.e("command id", id);
+            PushReceiverHandleManager.getInstance().onRegistration(var1, info);
+        }
     }
 
     /**

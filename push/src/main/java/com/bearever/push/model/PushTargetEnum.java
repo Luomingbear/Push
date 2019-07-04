@@ -6,15 +6,35 @@ package com.bearever.push.model;
  */
 
 public enum PushTargetEnum {
-    JPUSH("JPUSH"), //极光
+    /**
+     * 极光
+     */
+    JPUSH("JPUSH"),
 
-    XIAOMI("XIAOMI"), //小米
+    /**
+     * 小米
+     */
+    XIAOMI("XIAOMI"),
 
-    HUAWEI("HUAWEI"),//华为
+    /**
+     * 华为
+     */
+    HUAWEI("HUAWEI"),
 
-    OPPO("OPPO"),//oppo
+    /**
+     * OPPO
+     */
+    OPPO("OPPO"),
 
-    MEIZU("MEIZU"); //魅族
+    /**
+     * 魅族
+     */
+    MEIZU("MEIZU"),
+
+    /**
+     * VIVO
+     */
+    VIVO("VIVO");
 
     public String brand;
 

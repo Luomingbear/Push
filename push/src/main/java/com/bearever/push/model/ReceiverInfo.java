@@ -1,11 +1,12 @@
 package com.bearever.push.model;
 
+import java.io.Serializable;
+
 /**
  * 接收到的推送的消息
  * Created by luoming on 2018/5/28.
  */
-
-public class ReceiverInfo {
+public class ReceiverInfo implements Serializable {
     private PushTargetEnum pushTarget = PushTargetEnum.JPUSH; //推送平台
     private String title = ""; //标题
     private String content = ""; //内容
@@ -62,5 +63,10 @@ public class ReceiverInfo {
 
     public void setRawData(Object rawData) {
         this.rawData = rawData;
+    }
+
+    @Override
+    public String toString() {
+        return "推送平台:" + getPushTarget().brand + "\ntitle:" + getTitle() + "\ncontent:" + getContent();
     }
 }

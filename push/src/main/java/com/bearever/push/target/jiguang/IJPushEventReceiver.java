@@ -2,9 +2,9 @@ package com.bearever.push.target.jiguang;
 
 import android.content.Context;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.service.JPushMessageReceiver;

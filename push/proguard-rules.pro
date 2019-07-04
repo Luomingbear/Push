@@ -62,3 +62,9 @@
 #OPPO推送 start
 -keep public class * extends android.app.Service
 #OPPO推送 end
+
+#VIVO推送 start
+-dontwarn com.vivo.push.**-keep class com.vivo.push.**{*; }
+-keep class com.vivo.vms.**{*; }
+-keep class xxx.xxx.xxx.PushMessageReceiverImpl{*;}
+#VIVO推送 end

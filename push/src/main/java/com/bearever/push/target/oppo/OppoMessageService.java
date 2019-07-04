@@ -3,7 +3,7 @@ package com.bearever.push.target.oppo;
 import android.content.Context;
 import android.util.Log;
 
-import com.bearever.push.handle.PushReceiverHandleManager;
+import com.bearever.push.receiver.PushReceiverHandleManager;
 import com.bearever.push.model.PushTargetEnum;
 import com.bearever.push.model.ReceiverInfo;
 import com.coloros.mcssdk.PushService;
