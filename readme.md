@@ -5,7 +5,9 @@
 
 ## 更新时间
 
-2019/04/18
+2019/07/4
+
+添加统一接收消息的`BasePushBroadcastReceiver`和vivo推送平台
 
 ## 使用
 

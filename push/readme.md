@@ -7,6 +7,8 @@
 
 2019/04/18
 
+添加统一接收消息的`BasePushBroadcastReceiver`和vivo推送平台
+
 ## 使用
 
 ### 1.配置AppKey
