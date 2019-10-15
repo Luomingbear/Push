@@ -112,6 +112,7 @@ public class PushReceiverHandleManager {
             ComponentName cn =
                     new ComponentName(resolveInfo.activityInfo.applicationInfo.packageName,
                             resolveInfo.activityInfo.name);
+            explicit.setPackage(resolveInfo.activityInfo.applicationInfo.packageName);
             explicit.setComponent(cn);
             ctxt.sendBroadcast(explicit, ctxt.getPackageName() + PushTargetManager.PERMISSION);
         }
